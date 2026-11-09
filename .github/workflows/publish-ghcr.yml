@@ -13,7 +13,7 @@ on:
       image:
         description: 'Docker repository (ex: owner/repo)'
         required: true
-        default: 'alorf/twitchdropsbot'
+        default: 'ryoshiin/twitchdropsbot'
       tag:
         description: 'Tag to push'
         required: true
@@ -48,12 +48,12 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ghcr.io/${{ github.event.inputs.image || 'alorf/twitchdropsbot' }}
+          images: ghcr.io/${{ github.event.inputs.image || 'ryoshiin/twitchdropsbot' }}
           tags: |
             type=raw,value=dev,enable=${{ github.ref_type == 'branch' && github.event_name != 'workflow_dispatch' }}
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=raw,value=latest,enable=${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' }}
+            type=raw,value=latest,enable=${{ github.ref_type == 'tag' || github.event_name == 'workflow_dispatch' || github.ref_name == 'master' }}
             type=raw,value=${{ github.event.inputs.tag }},enable=${{ github.event_name == 'workflow_dispatch' }}
 
       - name: Build and push Docker image
